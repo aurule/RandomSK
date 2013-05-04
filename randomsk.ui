@@ -16,6 +16,7 @@
           <object class="GtkComboBox" id="pair_select">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <signal name="changed" handler="app.pick" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -45,9 +46,11 @@
             <child>
               <object class="GtkButton" id="copybtn">
                 <property name="label">gtk-copy</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="app.do_copy" swapped="no"/>
               </object>
@@ -71,10 +74,13 @@
             <property name="spacing">5</property>
             <child>
               <object class="GtkButton" id="randbtn">
-                <property name="label" translatable="yes">Randomize</property>
+                <property name="label" translatable="yes">_Randomize</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
+                <property name="use_underline">True</property>
                 <signal name="clicked" handler="app.generate" swapped="no"/>
               </object>
               <packing>
@@ -86,9 +92,11 @@
             <child>
               <object class="GtkButton" id="exitbtn">
                 <property name="label">gtk-quit</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">True</property>
+                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="app.quit" swapped="no"/>
               </object>

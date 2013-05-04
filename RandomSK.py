@@ -45,7 +45,9 @@ pairs = {"Changeling: the Lost":{"Beast":[
             "Chirurgeon",
             "Smith",
             "Soldier"
-        ]}}
+        ]},
+    "Mage: the Awakening":{"a":["b"]}
+}
 
 
 # Define the gui and its actions.
@@ -67,20 +69,25 @@ class Picker:
     def update_title(self):
         self.title = "RandomSK - %s" % self.key
         self.window.set_title(self.title)
-
+    
+    def choose_pair(self, widget=None, data=None):
+        self.key = self.pairs_store[self.picker.get_active_iter()][0]
+        self.pairdict = pairs[self.key]
+        self.update_title()
+        
     def __init__(self):
         self.builder = Gtk.Builder()
         self.builder.add_from_file("randomsk.ui")
         self.title = "RandomSK"
-        #self.pairdict = pairs['Changeling: the Lost']
         
         # get refs to every part we'll be manipulating
         self.disp = self.builder.get_object("output_text")
         self.picker = self.builder.get_object("pair_select")
         
-        #TODO set up the picker's label store and attach
+        # set up the picker's label store and attach
         self.pairs_store = Gtk.ListStore(str)
-        self.pairs_store.append(pairs.keys())
+        for k in pairs.keys():
+            self.pairs_store.append([k])
         self.picker.set_model(self.pairs_store)
         renderer_text = Gtk.CellRendererText()
         self.picker.pack_start(renderer_text, True)
@@ -90,7 +97,8 @@ class Picker:
         handlers_main = {
             "app.quit": self.destroy,
             "app.generate": self.pick_rand,
-            "app.do_copy": self.copy
+            "app.do_copy": self.copy,
+            "app.pick": self.choose_pair
         }
         self.builder.connect_signals(handlers_main)
         
@@ -104,11 +112,6 @@ class Picker:
         
         # set the value for our dropdown, activating update triggers
         self.picker.set_active_iter(self.pairs_store[0].iter)
-        
-        self.key = self.pairs_store[self.picker.get_active_iter()][0]
-        self.pairdict = pairs[self.key]
-        self.update_title()
-        
         self.pick_rand()
 
 def main():
