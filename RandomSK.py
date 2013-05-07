@@ -1,61 +1,13 @@
 #!/usr/bin/env python
 
 from gi.repository import Gtk, Gdk
-from random import choice
 
-# Available seemings and kiths. Change as you like to suit your needs.
-pairs = {"Changeling: the Lost":{"Beast":[
-            "Broadback",
-            "Hunterheart",
-            "Runnerswift",
-            "Skitterskulk",
-            "Swimmerskin",
-            "Venombite",
-            "Windwing"
-        ],"Darkling":[
-            "Antiquarian",
-            "Gravewight",
-            "Leechfinger",
-            "Mirrorskin",
-            "Tunnelgrub"
-        ],"Elemental":[
-            "Airtouched",
-            "Earthbones",
-            "Fireheart",
-            "Manikin",
-            "Waterborn",
-            "Woodblood"
-        ],"Fairest":[
-            "Bright one",
-            "Dancer",
-            "Draconic",
-            "Flowering",
-            "Muse"
-        ],"Ogre":[
-            "Cyclopean",
-            "Farwalker",
-            "Gargantuan",
-            "Gristlegrinder",
-            "Stonebones",
-            "Water-dweller"
-        ],"Wizened":[
-            "Artist",
-            "Brewer",
-            "Chatelaine",
-            "Chirurgeon",
-            "Smith",
-            "Soldier"
-        ]},
-    "Mage: the Awakening":{"a":["b"]}
-}
-
+import pairdefs
 
 # Define the gui and its actions.
 class Picker:
     def pick_rand(self, widget=None, data=None):
-        seeming = choice(self.pairdict.keys())
-        kith = choice(self.pairdict[seeming])
-        self.disp.set_text(seeming+" "+kith)
+        self.disp.set_text(self.pairdict.pick())
 
     def copy(self, widget, data=None):
         self.clipboard.set_text(self.disp.get_text(), -1)
@@ -72,13 +24,14 @@ class Picker:
     
     def choose_pair(self, widget=None, data=None):
         self.key = self.pairs_store[self.picker.get_active_iter()][0]
-        self.pairdict = pairs[self.key]
+        self.pairdict = self.pairs[self.key]
         self.update_title()
         
     def __init__(self):
         self.builder = Gtk.Builder()
         self.builder.add_from_file("randomsk.ui")
         self.title = "RandomSK"
+        self.pairs = pairdefs.pairs
         
         # get refs to every part we'll be manipulating
         self.disp = self.builder.get_object("output_text")
@@ -86,7 +39,7 @@ class Picker:
         
         # set up the picker's label store and attach
         self.pairs_store = Gtk.ListStore(str)
-        for k in pairs.keys():
+        for k in sorted(self.pairs.keys()):
             self.pairs_store.append([k])
         self.picker.set_model(self.pairs_store)
         renderer_text = Gtk.CellRendererText()
@@ -119,7 +72,7 @@ def main():
     return
 
 # If the program is run directly or passed as an argument to the python
-# interpreter then create a HelloWorld instance and show it
+# interpreter then create a Picker instance and show it
 if __name__ == "__main__":
     choose = Picker()
     main()
